@@ -1,3 +1,5 @@
+github.com/DGHeroin/rocksdb v0.0.0-20210908142004-cbcd8f605263 h1:SCXS+3V4vaidVVuGPFhcCY6lOBoXA0eg1PFpSLMvBpw=
+github.com/DGHeroin/rocksdb v0.0.0-20210908142004-cbcd8f605263/go.mod h1:A07UIUsOCoAlB+2zO9GtyyPOhHaDmluYp+Wx5nz6QaU=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/facebookgo/ensure v0.0.0-20200202191622-63f1cf65ac4c h1:8ISkoahWXwZR41ois5lSJBSVw4D0OV19Ht/JSTzvSv0=
