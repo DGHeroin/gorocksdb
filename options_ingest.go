@@ -5,23 +5,23 @@ import "C"
 
 // IngestExternalFileOptions represents available options when ingesting external files.
 type IngestExternalFileOptions struct {
-	c *C.rocksdb_ingestexternalfileoptions_t
+    c *C.rocksdb_ingestexternalfileoptions_t
 }
 
 // NewDefaultIngestExternalFileOptions creates a default IngestExternalFileOptions object.
 func NewDefaultIngestExternalFileOptions() *IngestExternalFileOptions {
-	return NewNativeIngestExternalFileOptions(C.rocksdb_ingestexternalfileoptions_create())
+    return NewNativeIngestExternalFileOptions(C.rocksdb_ingestexternalfileoptions_create())
 }
 
 // NewNativeIngestExternalFileOptions creates a IngestExternalFileOptions object.
 func NewNativeIngestExternalFileOptions(c *C.rocksdb_ingestexternalfileoptions_t) *IngestExternalFileOptions {
-	return &IngestExternalFileOptions{c: c}
+    return &IngestExternalFileOptions{c: c}
 }
 
 // SetMoveFiles specifies if it should move the files instead of copying them.
 // Default to false.
 func (opts *IngestExternalFileOptions) SetMoveFiles(flag bool) {
-	C.rocksdb_ingestexternalfileoptions_set_move_files(opts.c, boolToChar(flag))
+    C.rocksdb_ingestexternalfileoptions_set_move_files(opts.c, boolToChar(flag))
 }
 
 // SetSnapshotConsistency if specifies the consistency.
@@ -29,21 +29,21 @@ func (opts *IngestExternalFileOptions) SetMoveFiles(flag bool) {
 // file was ingested.
 // Default to true.
 func (opts *IngestExternalFileOptions) SetSnapshotConsistency(flag bool) {
-	C.rocksdb_ingestexternalfileoptions_set_snapshot_consistency(opts.c, boolToChar(flag))
+    C.rocksdb_ingestexternalfileoptions_set_snapshot_consistency(opts.c, boolToChar(flag))
 }
 
 // SetAllowGlobalSeqNo sets allow_global_seqno. If set to false,IngestExternalFile() will fail if the file key
 // range overlaps with existing keys or tombstones in the DB.
 // Default true.
 func (opts *IngestExternalFileOptions) SetAllowGlobalSeqNo(flag bool) {
-	C.rocksdb_ingestexternalfileoptions_set_allow_global_seqno(opts.c, boolToChar(flag))
+    C.rocksdb_ingestexternalfileoptions_set_allow_global_seqno(opts.c, boolToChar(flag))
 }
 
 // SetAllowBlockingFlush sets allow_blocking_flush. If set to false and the file key range overlaps with
 // the memtable key range (memtable flush required), IngestExternalFile will fail.
 // Default to true.
 func (opts *IngestExternalFileOptions) SetAllowBlockingFlush(flag bool) {
-	C.rocksdb_ingestexternalfileoptions_set_allow_blocking_flush(opts.c, boolToChar(flag))
+    C.rocksdb_ingestexternalfileoptions_set_allow_blocking_flush(opts.c, boolToChar(flag))
 }
 
 // SetIngestionBehind sets ingest_behind
@@ -55,11 +55,11 @@ func (opts *IngestExternalFileOptions) SetAllowBlockingFlush(flag bool) {
 // with allow_ingest_behind=true since the dawn of time.
 // All files will be ingested at the bottommost level with seqno=0.
 func (opts *IngestExternalFileOptions) SetIngestionBehind(flag bool) {
-	C.rocksdb_ingestexternalfileoptions_set_ingest_behind(opts.c, boolToChar(flag))
+    C.rocksdb_ingestexternalfileoptions_set_ingest_behind(opts.c, boolToChar(flag))
 }
 
 // Destroy deallocates the IngestExternalFileOptions object.
 func (opts *IngestExternalFileOptions) Destroy() {
-	C.rocksdb_ingestexternalfileoptions_destroy(opts.c)
-	opts.c = nil
+    C.rocksdb_ingestexternalfileoptions_destroy(opts.c)
+    opts.c = nil
 }

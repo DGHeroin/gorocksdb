@@ -24,8 +24,8 @@ type DB struct {
     opts *Options
 }
 
-// OpenDb opens a database with the specified options.
-func OpenDb(opts *Options, name string) (*DB, error) {
+// OpenDB opens a database with the specified options.
+func OpenDB(opts *Options, name string) (*DB, error) {
     var (
         cErr  *C.char
         cName = C.CString(name)
@@ -48,8 +48,8 @@ func OpenDb(opts *Options, name string) (*DB, error) {
     }, nil
 }
 
-// OpenDbWithTTL opens a database with TTL support with the specified options.
-func OpenDbWithTTL(opts *Options, name string, ttl int) (*DB, error) {
+// OpenDBWithTTL opens a database with TTL support with the specified options.
+func OpenDBWithTTL(opts *Options, name string, ttl int) (*DB, error) {
     var (
         cErr  *C.char
         cName = C.CString(name)
@@ -67,8 +67,8 @@ func OpenDbWithTTL(opts *Options, name string, ttl int) (*DB, error) {
     }, nil
 }
 
-// OpenDbForReadOnly opens a database with the specified options for readonly usage.
-func OpenDbForReadOnly(opts *Options, name string, errorIfLogFileExist bool) (*DB, error) {
+// OpenDBForReadOnly opens a database with the specified options for readonly usage.
+func OpenDBForReadOnly(opts *Options, name string, errorIfLogFileExist bool) (*DB, error) {
     var (
         cErr  *C.char
         cName = C.CString(name)
@@ -86,8 +86,8 @@ func OpenDbForReadOnly(opts *Options, name string, errorIfLogFileExist bool) (*D
     }, nil
 }
 
-// OpenDbColumnFamilies opens a database with the specified column families.
-func OpenDbColumnFamilies(
+// OpenDBColumnFamilies opens a database with the specified column families.
+func OpenDBColumnFamilies(
     opts *Options,
     name string,
     cfNames []string,
@@ -145,9 +145,9 @@ func OpenDbColumnFamilies(
     }, cfHandles, nil
 }
 
-// OpenDbForReadOnlyColumnFamilies opens a database with the specified column
+// OpenDBForReadOnlyColumnFamilies opens a database with the specified column
 // families in read only mode.
-func OpenDbForReadOnlyColumnFamilies(
+func OpenDBForReadOnlyColumnFamilies(
     opts *Options,
     name string,
     cfNames []string,

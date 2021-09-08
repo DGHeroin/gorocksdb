@@ -14,38 +14,38 @@ import "unsafe"
 type ReadTier uint
 
 const (
-	// ReadAllTier reads data in memtable, block cache, OS cache or storage.
-	ReadAllTier = ReadTier(0)
-	// BlockCacheTier reads data in memtable or block cache.
-	BlockCacheTier = ReadTier(1)
+    // ReadAllTier reads data in memtable, block cache, OS cache or storage.
+    ReadAllTier = ReadTier(0)
+    // BlockCacheTier reads data in memtable or block cache.
+    BlockCacheTier = ReadTier(1)
 )
 
 // ReadOptions represent all of the available options when reading from a
 // database.
 type ReadOptions struct {
-	c *C.rocksdb_readoptions_t
+    c *C.rocksdb_readoptions_t
 }
 
 // NewDefaultReadOptions creates a default ReadOptions object.
 func NewDefaultReadOptions() *ReadOptions {
-	return NewNativeReadOptions(C.rocksdb_readoptions_create())
+    return NewNativeReadOptions(C.rocksdb_readoptions_create())
 }
 
 // NewNativeReadOptions creates a ReadOptions object.
 func NewNativeReadOptions(c *C.rocksdb_readoptions_t) *ReadOptions {
-	return &ReadOptions{c}
+    return &ReadOptions{c}
 }
 
 // UnsafeGetReadOptions returns the underlying c read options object.
 func (opts *ReadOptions) UnsafeGetReadOptions() unsafe.Pointer {
-	return unsafe.Pointer(opts.c)
+    return unsafe.Pointer(opts.c)
 }
 
 // SetVerifyChecksums speciy if all data read from underlying storage will be
 // verified against corresponding checksums.
 // Default: false
 func (opts *ReadOptions) SetVerifyChecksums(value bool) {
-	C.rocksdb_readoptions_set_verify_checksums(opts.c, boolToChar(value))
+    C.rocksdb_readoptions_set_verify_checksums(opts.c, boolToChar(value))
 }
 
 // SetPrefixSameAsStart Enforce that the iterator only iterates over the same
@@ -56,7 +56,7 @@ func (opts *ReadOptions) SetVerifyChecksums(value bool) {
 // but in both directions.
 // Default: false
 func (opts *ReadOptions) SetPrefixSameAsStart(value bool) {
-	C.rocksdb_readoptions_set_prefix_same_as_start(opts.c, boolToChar(value))
+    C.rocksdb_readoptions_set_prefix_same_as_start(opts.c, boolToChar(value))
 }
 
 // SetFillCache specify whether the "data block"/"index block"/"filter block"
@@ -64,7 +64,7 @@ func (opts *ReadOptions) SetPrefixSameAsStart(value bool) {
 // Callers may wish to set this field to false for bulk scans.
 // Default: true
 func (opts *ReadOptions) SetFillCache(value bool) {
-	C.rocksdb_readoptions_set_fill_cache(opts.c, boolToChar(value))
+    C.rocksdb_readoptions_set_fill_cache(opts.c, boolToChar(value))
 }
 
 // SetSnapshot sets the snapshot which should be used for the read.
@@ -72,7 +72,7 @@ func (opts *ReadOptions) SetFillCache(value bool) {
 // not have been released.
 // Default: nil
 func (opts *ReadOptions) SetSnapshot(snap *Snapshot) {
-	C.rocksdb_readoptions_set_snapshot(opts.c, snap.c)
+    C.rocksdb_readoptions_set_snapshot(opts.c, snap.c)
 }
 
 // SetReadTier specify if this read request should process data that ALREADY
@@ -80,7 +80,7 @@ func (opts *ReadOptions) SetSnapshot(snap *Snapshot) {
 // found at the specified cache, then Status::Incomplete is returned.
 // Default: ReadAllTier
 func (opts *ReadOptions) SetReadTier(value ReadTier) {
-	C.rocksdb_readoptions_set_read_tier(opts.c, C.int(value))
+    C.rocksdb_readoptions_set_read_tier(opts.c, C.int(value))
 }
 
 // SetTailing specify if to create a tailing iterator.
@@ -90,7 +90,7 @@ func (opts *ReadOptions) SetReadTier(value ReadTier) {
 // that were inserted into the database after the creation of the iterator.
 // Default: false
 func (opts *ReadOptions) SetTailing(value bool) {
-	C.rocksdb_readoptions_set_tailing(opts.c, boolToChar(value))
+    C.rocksdb_readoptions_set_tailing(opts.c, boolToChar(value))
 }
 
 // SetIterateUpperBound specifies "iterate_upper_bound", which defines
@@ -104,9 +104,9 @@ func (opts *ReadOptions) SetTailing(value bool) {
 // implemented.
 // Default: nullptr
 func (opts *ReadOptions) SetIterateUpperBound(key []byte) {
-	cKey := byteToChar(key)
-	cKeyLen := C.size_t(len(key))
-	C.rocksdb_readoptions_set_iterate_upper_bound(opts.c, cKey, cKeyLen)
+    cKey := byteToChar(key)
+    cKeyLen := C.size_t(len(key))
+    C.rocksdb_readoptions_set_iterate_upper_bound(opts.c, cKey, cKeyLen)
 }
 
 // SetPinData specifies the value of "pin_data". If true, it keeps the blocks
@@ -117,7 +117,7 @@ func (opts *ReadOptions) SetIterateUpperBound(key []byte) {
 // return 1.
 // Default: false
 func (opts *ReadOptions) SetPinData(value bool) {
-	C.rocksdb_readoptions_set_pin_data(opts.c, boolToChar(value))
+    C.rocksdb_readoptions_set_pin_data(opts.c, boolToChar(value))
 }
 
 // SetReadaheadSize specifies the value of "readahead_size".
@@ -126,11 +126,11 @@ func (opts *ReadOptions) SetPinData(value bool) {
 // improve the performance of forward iteration on spinning disks.
 // Default: 0
 func (opts *ReadOptions) SetReadaheadSize(value uint64) {
-	C.rocksdb_readoptions_set_readahead_size(opts.c, C.size_t(value))
+    C.rocksdb_readoptions_set_readahead_size(opts.c, C.size_t(value))
 }
 
 // Destroy deallocates the ReadOptions object.
 func (opts *ReadOptions) Destroy() {
-	C.rocksdb_readoptions_destroy(opts.c)
-	opts.c = nil
+    C.rocksdb_readoptions_destroy(opts.c)
+    opts.c = nil
 }

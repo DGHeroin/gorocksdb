@@ -6,17 +6,17 @@ import "C"
 // TransactionDBOptions represent all of the available options when opening a transactional database
 // with OpenTransactionDb.
 type TransactionDBOptions struct {
-	c *C.rocksdb_transactiondb_options_t
+    c *C.rocksdb_transactiondb_options_t
 }
 
 // NewDefaultTransactionDBOptions creates a default TransactionDBOptions object.
 func NewDefaultTransactionDBOptions() *TransactionDBOptions {
-	return NewNativeTransactionDBOptions(C.rocksdb_transactiondb_options_create())
+    return NewNativeTransactionDBOptions(C.rocksdb_transactiondb_options_create())
 }
 
 // NewDefaultTransactionDBOptions creates a TransactionDBOptions object.
 func NewNativeTransactionDBOptions(c *C.rocksdb_transactiondb_options_t) *TransactionDBOptions {
-	return &TransactionDBOptions{c}
+    return &TransactionDBOptions{c}
 }
 
 // SetMaxNumLocks sets the maximum number of keys that can be locked at the same time
@@ -25,7 +25,7 @@ func NewNativeTransactionDBOptions(c *C.rocksdb_transactiondb_options_t) *Transa
 // writes (or GetForUpdate) will return an error.
 // If this value is not positive, no limit will be enforced.
 func (opts *TransactionDBOptions) SetMaxNumLocks(max_num_locks int64) {
-	C.rocksdb_transactiondb_options_set_max_num_locks(opts.c, C.int64_t(max_num_locks))
+    C.rocksdb_transactiondb_options_set_max_num_locks(opts.c, C.int64_t(max_num_locks))
 }
 
 // SetNumStripes sets the concurrency level.
@@ -34,7 +34,7 @@ func (opts *TransactionDBOptions) SetMaxNumLocks(max_num_locks int64) {
 // separate
 // mutex.
 func (opts *TransactionDBOptions) SetNumStripes(num_stripes uint64) {
-	C.rocksdb_transactiondb_options_set_num_stripes(opts.c, C.size_t(num_stripes))
+    C.rocksdb_transactiondb_options_set_num_stripes(opts.c, C.size_t(num_stripes))
 }
 
 // SetTransactionLockTimeout if positive, specifies the default wait timeout in milliseconds when
@@ -46,7 +46,7 @@ func (opts *TransactionDBOptions) SetNumStripes(num_stripes uint64) {
 // as it can lead to deadlocks.  Currently, there is no deadlock-detection to
 // recover from a deadlock.
 func (opts *TransactionDBOptions) SetTransactionLockTimeout(txn_lock_timeout int64) {
-	C.rocksdb_transactiondb_options_set_transaction_lock_timeout(opts.c, C.int64_t(txn_lock_timeout))
+    C.rocksdb_transactiondb_options_set_transaction_lock_timeout(opts.c, C.int64_t(txn_lock_timeout))
 }
 
 // SetDefaultLockTimeout if posititve, specifies the wait timeout in milliseconds when writing a key
@@ -62,11 +62,11 @@ func (opts *TransactionDBOptions) SetTransactionLockTimeout(txn_lock_timeout int
 // A negative timeout should only be used if all transactions have a small
 // expiration set.
 func (opts *TransactionDBOptions) SetDefaultLockTimeout(default_lock_timeout int64) {
-	C.rocksdb_transactiondb_options_set_default_lock_timeout(opts.c, C.int64_t(default_lock_timeout))
+    C.rocksdb_transactiondb_options_set_default_lock_timeout(opts.c, C.int64_t(default_lock_timeout))
 }
 
 // Destroy deallocates the TransactionDBOptions object.
 func (opts *TransactionDBOptions) Destroy() {
-	C.rocksdb_transactiondb_options_destroy(opts.c)
-	opts.c = nil
+    C.rocksdb_transactiondb_options_destroy(opts.c)
+    opts.c = nil
 }

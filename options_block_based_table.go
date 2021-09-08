@@ -8,44 +8,44 @@ import "C"
 type IndexType uint
 
 const (
-	// A space efficient index block that is optimized for
-	// binary-search-based index.
-	KBinarySearchIndexType = 0
-	// The hash index, if enabled, will do the hash lookup when
-	// `Options.prefix_extractor` is provided.
-	KHashSearchIndexType = 1
-	// A two-level index implementation. Both levels are binary search indexes.
-	KTwoLevelIndexSearchIndexType = 2
+    // A space efficient index block that is optimized for
+    // binary-search-based index.
+    KBinarySearchIndexType = 0
+    // The hash index, if enabled, will do the hash lookup when
+    // `Options.prefix_extractor` is provided.
+    KHashSearchIndexType = 1
+    // A two-level index implementation. Both levels are binary search indexes.
+    KTwoLevelIndexSearchIndexType = 2
 )
 
 // BlockBasedTableOptions represents block-based table options.
 type BlockBasedTableOptions struct {
-	c *C.rocksdb_block_based_table_options_t
+    c *C.rocksdb_block_based_table_options_t
 
-	// Hold references for GC.
-	cache     *Cache
-	compCache *Cache
+    // Hold references for GC.
+    cache     *Cache
+    compCache *Cache
 
-	// We keep these so we can free their memory in Destroy.
-	cFp *C.rocksdb_filterpolicy_t
+    // We keep these so we can free their memory in Destroy.
+    cFp *C.rocksdb_filterpolicy_t
 }
 
 // NewDefaultBlockBasedTableOptions creates a default BlockBasedTableOptions object.
 func NewDefaultBlockBasedTableOptions() *BlockBasedTableOptions {
-	return NewNativeBlockBasedTableOptions(C.rocksdb_block_based_options_create())
+    return NewNativeBlockBasedTableOptions(C.rocksdb_block_based_options_create())
 }
 
 // NewNativeBlockBasedTableOptions creates a BlockBasedTableOptions object.
 func NewNativeBlockBasedTableOptions(c *C.rocksdb_block_based_table_options_t) *BlockBasedTableOptions {
-	return &BlockBasedTableOptions{c: c}
+    return &BlockBasedTableOptions{c: c}
 }
 
 // Destroy deallocates the BlockBasedTableOptions object.
 func (opts *BlockBasedTableOptions) Destroy() {
-	C.rocksdb_block_based_options_destroy(opts.c)
-	opts.c = nil
-	opts.cache = nil
-	opts.compCache = nil
+    C.rocksdb_block_based_options_destroy(opts.c)
+    opts.c = nil
+    opts.cache = nil
+    opts.compCache = nil
 }
 
 // SetCacheIndexAndFilterBlocks is indicating if we'd put index/filter blocks to the block cache.
@@ -53,7 +53,7 @@ func (opts *BlockBasedTableOptions) Destroy() {
 // block during table initialization.
 // Default: false
 func (opts *BlockBasedTableOptions) SetCacheIndexAndFilterBlocks(value bool) {
-	C.rocksdb_block_based_options_set_cache_index_and_filter_blocks(opts.c, boolToChar(value))
+    C.rocksdb_block_based_options_set_cache_index_and_filter_blocks(opts.c, boolToChar(value))
 }
 
 // SetCacheIndexAndFilterBlocksWithHighPriority sets cache index and filter
@@ -61,7 +61,7 @@ func (opts *BlockBasedTableOptions) SetCacheIndexAndFilterBlocks(value bool) {
 // If set to true, depending on implementation of block cache,
 // index and filter blocks may be less likely to be evicted than data blocks.
 func (opts *BlockBasedTableOptions) SetCacheIndexAndFilterBlocksWithHighPriority(value bool) {
-	C.rocksdb_block_based_options_set_cache_index_and_filter_blocks_with_high_priority(opts.c, boolToChar(value))
+    C.rocksdb_block_based_options_set_cache_index_and_filter_blocks_with_high_priority(opts.c, boolToChar(value))
 }
 
 // SetPinL0FilterAndIndexBlocksInCache sets cache_index_and_filter_blocks.
@@ -70,7 +70,7 @@ func (opts *BlockBasedTableOptions) SetCacheIndexAndFilterBlocksWithHighPriority
 // held in the "table reader" object so the blocks are pinned and only
 // evicted from cache when the table reader is freed.
 func (opts *BlockBasedTableOptions) SetPinL0FilterAndIndexBlocksInCache(value bool) {
-	C.rocksdb_block_based_options_set_pin_l0_filter_and_index_blocks_in_cache(opts.c, boolToChar(value))
+    C.rocksdb_block_based_options_set_pin_l0_filter_and_index_blocks_in_cache(opts.c, boolToChar(value))
 }
 
 // SetPinTopLevelIndexAndFilter set that if cache_index_and_filter_blocks is true, then
@@ -79,7 +79,7 @@ func (opts *BlockBasedTableOptions) SetPinL0FilterAndIndexBlocksInCache(value bo
 // blocks are pinned and only evicted from cache when the table reader is
 // freed. This is not limited to l0 in LSM tree.
 func (opts *BlockBasedTableOptions) SetPinTopLevelIndexAndFilter(value bool) {
-	C.rocksdb_block_based_options_set_pin_top_level_index_and_filter(opts.c, boolToChar(value))
+    C.rocksdb_block_based_options_set_pin_top_level_index_and_filter(opts.c, boolToChar(value))
 }
 
 // SetBlockSize sets the approximate size of user data packed per block.
@@ -88,7 +88,7 @@ func (opts *BlockBasedTableOptions) SetPinTopLevelIndexAndFilter(value bool) {
 // compression is enabled. This parameter can be changed dynamically.
 // Default: 4K
 func (opts *BlockBasedTableOptions) SetBlockSize(blockSize int) {
-	C.rocksdb_block_based_options_set_block_size(opts.c, C.size_t(blockSize))
+    C.rocksdb_block_based_options_set_block_size(opts.c, C.size_t(blockSize))
 }
 
 // SetBlockSizeDeviation sets the block size deviation.
@@ -99,7 +99,7 @@ func (opts *BlockBasedTableOptions) SetBlockSize(blockSize int) {
 // new record will be written opts the next block.
 // Default: 10
 func (opts *BlockBasedTableOptions) SetBlockSizeDeviation(blockSizeDeviation int) {
-	C.rocksdb_block_based_options_set_block_size_deviation(opts.c, C.int(blockSizeDeviation))
+    C.rocksdb_block_based_options_set_block_size_deviation(opts.c, C.int(blockSizeDeviation))
 }
 
 // SetBlockRestartInterval sets the number of keys between
@@ -108,13 +108,13 @@ func (opts *BlockBasedTableOptions) SetBlockSizeDeviation(blockSizeDeviation int
 // leave this parameter alone.
 // Default: 16
 func (opts *BlockBasedTableOptions) SetBlockRestartInterval(blockRestartInterval int) {
-	C.rocksdb_block_based_options_set_block_restart_interval(opts.c, C.int(blockRestartInterval))
+    C.rocksdb_block_based_options_set_block_restart_interval(opts.c, C.int(blockRestartInterval))
 }
 
 // SetIndexBlockRestartInterval is the same as SetBlockRestartInterval but used for the index block.
 // Default: 1
 func (opts *BlockBasedTableOptions) SetIndexBlockRestartInterval(indexBlockRestartInterval int) {
-	C.rocksdb_block_based_options_set_index_block_restart_interval(opts.c, C.int(indexBlockRestartInterval))
+    C.rocksdb_block_based_options_set_index_block_restart_interval(opts.c, C.int(indexBlockRestartInterval))
 }
 
 // SetMetadataBlockSize sets the block size for partitioned metadata.
@@ -127,7 +127,7 @@ func (opts *BlockBasedTableOptions) SetIndexBlockRestartInterval(indexBlockResta
 // partition is cut right after an index block is cut
 // Default: 4096
 func (opts *BlockBasedTableOptions) SetMetadataBlockSize(metadataBlockSize uint64) {
-	C.rocksdb_block_based_options_set_metadata_block_size(opts.c, C.uint64_t(metadataBlockSize))
+    C.rocksdb_block_based_options_set_metadata_block_size(opts.c, C.uint64_t(metadataBlockSize))
 }
 
 // SetPartitionFilters sets using partitioned full filters for each SST file.
@@ -135,13 +135,13 @@ func (opts *BlockBasedTableOptions) SetMetadataBlockSize(metadataBlockSize uint6
 // Note: currently this option requires kTwoLevelIndexSearch to be set as well.
 // Default: false
 func (opts *BlockBasedTableOptions) SetPartitionFilters(value bool) {
-	C.rocksdb_block_based_options_set_partition_filters(opts.c, boolToChar(value))
+    C.rocksdb_block_based_options_set_partition_filters(opts.c, boolToChar(value))
 }
 
 // SetUseDeltaEncoding sets using delta encoding to compress keys in blocks.
 // ReadOptions::pin_data requires this option to be disabled.
 func (opts *BlockBasedTableOptions) SetUseDeltaEncoding(value bool) {
-	C.rocksdb_block_based_options_set_use_delta_encoding(opts.c, boolToChar(value))
+    C.rocksdb_block_based_options_set_use_delta_encoding(opts.c, boolToChar(value))
 }
 
 // SetFilterPolicy sets the filter policy opts reduce disk reads.
@@ -149,19 +149,19 @@ func (opts *BlockBasedTableOptions) SetUseDeltaEncoding(value bool) {
 // NewBloomFilterPolicy() here.
 // Default: nil
 func (opts *BlockBasedTableOptions) SetFilterPolicy(fp FilterPolicy) {
-	if nfp, ok := fp.(nativeFilterPolicy); ok {
-		opts.cFp = nfp.c
-	} else {
-		idx := registerFilterPolicy(fp)
-		opts.cFp = C.gorocksdb_filterpolicy_create(C.uintptr_t(idx))
-	}
-	C.rocksdb_block_based_options_set_filter_policy(opts.c, opts.cFp)
+    if nfp, ok := fp.(nativeFilterPolicy); ok {
+        opts.cFp = nfp.c
+    } else {
+        idx := registerFilterPolicy(fp)
+        opts.cFp = C.gorocksdb_filterpolicy_create(C.uintptr_t(idx))
+    }
+    C.rocksdb_block_based_options_set_filter_policy(opts.c, opts.cFp)
 }
 
 // SetNoBlockCache specify whether block cache should be used or not.
 // Default: false
 func (opts *BlockBasedTableOptions) SetNoBlockCache(value bool) {
-	C.rocksdb_block_based_options_set_no_block_cache(opts.c, boolToChar(value))
+    C.rocksdb_block_based_options_set_no_block_cache(opts.c, boolToChar(value))
 }
 
 // SetBlockCache sets the control over blocks (user data is stored in a set of blocks, and
@@ -171,16 +171,16 @@ func (opts *BlockBasedTableOptions) SetNoBlockCache(value bool) {
 // If nil, rocksdb will auoptsmatically create and use an 8MB internal cache.
 // Default: nil
 func (opts *BlockBasedTableOptions) SetBlockCache(cache *Cache) {
-	opts.cache = cache
-	C.rocksdb_block_based_options_set_block_cache(opts.c, cache.c)
+    opts.cache = cache
+    C.rocksdb_block_based_options_set_block_cache(opts.c, cache.c)
 }
 
 // SetBlockCacheCompressed sets the cache for compressed blocks.
 // If nil, rocksdb will not use a compressed block cache.
 // Default: nil
 func (opts *BlockBasedTableOptions) SetBlockCacheCompressed(cache *Cache) {
-	opts.compCache = cache
-	C.rocksdb_block_based_options_set_block_cache_compressed(opts.c, cache.c)
+    opts.compCache = cache
+    C.rocksdb_block_based_options_set_block_cache_compressed(opts.c, cache.c)
 }
 
 // SetWholeKeyFiltering specify if whole keys in the filter (not just prefixes)
@@ -188,7 +188,7 @@ func (opts *BlockBasedTableOptions) SetBlockCacheCompressed(cache *Cache) {
 // This must generally be true for gets opts be efficient.
 // Default: true
 func (opts *BlockBasedTableOptions) SetWholeKeyFiltering(value bool) {
-	C.rocksdb_block_based_options_set_whole_key_filtering(opts.c, boolToChar(value))
+    C.rocksdb_block_based_options_set_whole_key_filtering(opts.c, boolToChar(value))
 }
 
 // SetFormatVersion sets the format version.
@@ -217,7 +217,7 @@ func (opts *BlockBasedTableOptions) SetWholeKeyFiltering(value bool) {
 // tables, the information about version is read from the footer.
 // Default: 2
 func (opts *BlockBasedTableOptions) SetFormatVersion(version int) {
-	C.rocksdb_block_based_options_set_format_version(opts.c, C.int(version))
+    C.rocksdb_block_based_options_set_format_version(opts.c, C.int(version))
 }
 
 // SetIndexType sets the index type used for this table.
@@ -233,5 +233,5 @@ func (opts *BlockBasedTableOptions) SetFormatVersion(version int) {
 // A two-level index implementation. Both levels are binary search indexes.
 // Default: kBinarySearch
 func (opts *BlockBasedTableOptions) SetIndexType(value IndexType) {
-	C.rocksdb_block_based_options_set_index_type(opts.c, C.int(value))
+    C.rocksdb_block_based_options_set_index_type(opts.c, C.int(value))
 }
