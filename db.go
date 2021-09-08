@@ -6,6 +6,7 @@ import "C"
 import (
 	"errors"
 	"fmt"
+	"os"
 	"unsafe"
 )
 
@@ -29,6 +30,11 @@ func OpenDb(opts *Options, name string) (*DB, error) {
 		cErr  *C.char
 		cName = C.CString(name)
 	)
+	if _, err := os.Stat(name); os.IsNotExist(err) {
+		if err := os.MkdirAll(name, 0755); err != nil {
+			return nil, err
+		}
+	}
 	defer C.free(unsafe.Pointer(cName))
 	db := C.rocksdb_open(opts.c, cName, &cErr)
 	if cErr != nil {
@@ -605,7 +611,7 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 			C.free(unsafe.Pointer(cLimits[i]))
 		}
 	}()
-
+	var cErr *C.char
 	C.rocksdb_approximate_sizes(
 		db.c,
 		C.int(len(ranges)),
@@ -613,7 +619,8 @@ func (db *DB) GetApproximateSizes(ranges []Range) []uint64 {
 		&cStartLens[0],
 		&cLimits[0],
 		&cLimitLens[0],
-		(*C.uint64_t)(&sizes[0]))
+		(*C.uint64_t)(&sizes[0]),
+		&cErr)
 
 	return sizes
 }
@@ -646,7 +653,7 @@ func (db *DB) GetApproximateSizesCF(cf *ColumnFamilyHandle, ranges []Range) []ui
 			C.free(unsafe.Pointer(cLimits[i]))
 		}
 	}()
-
+	var cErr *C.char
 	C.rocksdb_approximate_sizes_cf(
 		db.c,
 		cf.c,
@@ -655,7 +662,8 @@ func (db *DB) GetApproximateSizesCF(cf *ColumnFamilyHandle, ranges []Range) []ui
 		&cStartLens[0],
 		&cLimits[0],
 		&cLimitLens[0],
-		(*C.uint64_t)(&sizes[0]))
+		(*C.uint64_t)(&sizes[0]),
+		&cErr)
 
 	return sizes
 }
