@@ -5,19 +5,19 @@ package gorocksdb
 import "C"
 
 import (
-	"errors"
-	"unsafe"
+    "errors"
+    "unsafe"
 )
 
 // Checkpoint provides Checkpoint functionality.
 // Checkpoints provide persistent snapshots of RocksDB databases.
 type Checkpoint struct {
-	c *C.rocksdb_checkpoint_t
+    c *C.rocksdb_checkpoint_t
 }
 
 // NewNativeCheckpoint creates a new checkpoint.
 func NewNativeCheckpoint(c *C.rocksdb_checkpoint_t) *Checkpoint {
-	return &Checkpoint{c}
+    return &Checkpoint{c}
 }
 
 // CreateCheckpoint builds an openable snapshot of RocksDB on the same disk, which
@@ -34,23 +34,23 @@ func NewNativeCheckpoint(c *C.rocksdb_checkpoint_t) *Checkpoint {
 // if WAL writing is not always enabled.
 // Flush will always trigger if it is 2PC.
 func (checkpoint *Checkpoint) CreateCheckpoint(checkpoint_dir string, log_size_for_flush uint64) error {
-	var (
-		cErr *C.char
-	)
+    var (
+        cErr *C.char
+    )
 
-	cDir := C.CString(checkpoint_dir)
-	defer C.free(unsafe.Pointer(cDir))
+    cDir := C.CString(checkpoint_dir)
+    defer C.free(unsafe.Pointer(cDir))
 
-	C.rocksdb_checkpoint_create(checkpoint.c, cDir, C.uint64_t(log_size_for_flush), &cErr)
-	if cErr != nil {
-		defer C.rocksdb_free(unsafe.Pointer(cErr))
-		return errors.New(C.GoString(cErr))
-	}
-	return nil
+    C.rocksdb_checkpoint_create(checkpoint.c, cDir, C.uint64_t(log_size_for_flush), &cErr)
+    if cErr != nil {
+        defer C.rocksdb_free(unsafe.Pointer(cErr))
+        return errors.New(C.GoString(cErr))
+    }
+    return nil
 }
 
 // Destroy deallocates the Checkpoint object.
 func (checkpoint *Checkpoint) Destroy() {
-	C.rocksdb_checkpoint_object_destroy(checkpoint.c)
-	checkpoint.c = nil
+    C.rocksdb_checkpoint_object_destroy(checkpoint.c)
+    checkpoint.c = nil
 }
